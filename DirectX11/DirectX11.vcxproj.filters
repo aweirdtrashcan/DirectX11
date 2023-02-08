@@ -16,6 +16,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{d29c5b35-7284-4565-a7db-f805a926a015}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Macros">
+      <UniqueIdentifier>{7d31f52b-4722-4c9a-ab60-61df0f885a61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -50,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="ChiliException.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowMacros.h">
+      <Filter>Header Files\Macros</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

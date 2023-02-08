@@ -1,6 +1,5 @@
 #include "Graphics.h"
 
-#define DX_CLEAR_MESSAGES dxgiIM.Set // clear past messages in the DXGI Message Queue
 
 namespace WRL = Microsoft::WRL;
 

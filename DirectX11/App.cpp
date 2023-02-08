@@ -29,10 +29,10 @@ void App::DoFrame()
 		(-wnd.mouse.GetPosY() / 300.f) + 1.0f
 	);
 
-	wnd.Gfx().DrawTestTriangle(
+	/*wnd.Gfx().DrawTestTriangle(
 		timer.Peek(),
 		0, 0.8
-	);
+	);*/
 
 	wnd.Gfx().EndFrame();
 }

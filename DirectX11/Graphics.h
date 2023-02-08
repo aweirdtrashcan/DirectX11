@@ -13,8 +13,16 @@
 #include "DxgiInfoManager.h"
 #include "GraphicsException.h"
 
+namespace WRL = Microsoft::WRL;
+
+struct ConstantBuffer
+{
+	DirectX::XMMATRIX transform;
+};
+
 class Graphics
 {
+	friend class Renderer;
 public:
 	Graphics(HWND hWnd, UINT, UINT);
 	~Graphics() = default;
@@ -31,7 +39,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
+	WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
 	DxgiInfoManager dxgiIM;
+	bool allSetup = false;
+	size_t indices_size = 0;
 private:
 	UINT width;
 	UINT height;

@@ -13,4 +13,6 @@ private:
 private:
 	ChiliTimer timer;
 	Window wnd;
+	float yDelta = 0.0f;
+	float xDelta = 0.0f;
 };

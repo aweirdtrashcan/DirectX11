@@ -30,7 +30,7 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue, float alpha = 1.0f);
-	void DrawTestTriangle(float, float, float);
+	void DrawTestTriangle(float angle, float x, float z, float y = 1.0f);
 	void CheckException() const;
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;

@@ -89,9 +89,9 @@ Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 void Graphics::EndFrame()
 {
 #ifndef NDEBUG
-	DX_CHECK_ERROR(pSwap->Present(0u, 0u));
+	DX_CHECK_ERROR(pSwap->Present(1u, 0u));
 #else
-	pSwap->Present(0u, 0u);
+	pSwap->Present(1u, 0u);
 #endif
 }
 
@@ -102,7 +102,7 @@ void Graphics::ClearBuffer(float red, float green, float blue, float alpha)
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, NULL);
 }
 
-void Graphics::DrawTestTriangle(float angle, float x, float z)
+void Graphics::DrawTestTriangle(float angle, float x, float z, float y)
 {
 	if (allSetup)
 	{
@@ -200,7 +200,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float z)
 				DirectX::XMMatrixTranspose(
 					DirectX::XMMatrixRotationZ(angle) *
 					DirectX::XMMatrixRotationX(angle) *
-					DirectX::XMMatrixTranslation(x, 0.0f, z + 4.0f) *
+					DirectX::XMMatrixTranslation(x, y, z + 4.0f) *
 					DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.f)
 				)
 			}
@@ -235,12 +235,12 @@ void Graphics::DrawTestTriangle(float angle, float x, float z)
 		const ConstantBuffer2 cb2 =
 		{
 			{
-				{1.0f, 0.0f, 1.0f, 1.0f},
-				{1.0f, 0.0f, 0.0f, 1.0f},
-				{0.0f, 1.0f, 0.0f, 1.0f},
-				{0.0f, 0.0f, 1.0f, 1.0f},
-				{1.0f, 1.0f, 0.0f, 1.0f},
-				{0.0f, 1.0f, 1.0f, 1.0f},
+				{1.0f, 0.0f, 1.0f},
+				{1.0f, 0.0f, 0.0f},
+				{0.0f, 1.0f, 0.0f},
+				{0.0f, 0.0f, 1.0f},
+				{1.0f, 1.0f, 0.0f},
+				{0.0f, 1.0f, 1.0f},
 			}
 		};
 

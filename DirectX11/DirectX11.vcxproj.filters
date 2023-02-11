@@ -19,6 +19,18 @@
     <Filter Include="Header Files\Macros">
       <UniqueIdentifier>{7d31f52b-4722-4c9a-ab60-61df0f885a61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Bindable">
+      <UniqueIdentifier>{7e8b5aec-3b10-48f1-843f-d0dd9b429c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bindable">
+      <UniqueIdentifier>{e8a32918-1ed2-48e6-bda1-1f505bf5e3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Drawable">
+      <UniqueIdentifier>{94546f9e-5b45-451c-b565-ba45522cf2de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Drawable">
+      <UniqueIdentifier>{7488b0cf-da73-44e3-82b7-90142c890edd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -57,6 +69,42 @@
     <ClInclude Include="ThrowMacros.h">
       <Filter>Header Files\Macros</Filter>
     </ClInclude>
+    <ClInclude Include="Bindable.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Topology.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableBase.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformCBuf.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.hpp">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.hpp">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.hpp">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -91,6 +139,36 @@
     </ClCompile>
     <ClCompile Include="ChiliException.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Topology.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformCBuf.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

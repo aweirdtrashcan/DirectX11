@@ -129,27 +129,49 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Bindable.hpp" />
+    <ClInclude Include="BindableBase.hpp" />
+    <ClInclude Include="Box.hpp" />
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliTimer.h" />
     <ClInclude Include="ChiliWin.h" />
+    <ClInclude Include="ConstantBuffer.hpp" />
+    <ClInclude Include="Drawable.hpp" />
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsException.h" />
+    <ClInclude Include="IndexBuffer.hpp" />
+    <ClInclude Include="InputLayout.hpp" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PixelShader.hpp" />
     <ClInclude Include="ThrowMacros.h" />
+    <ClInclude Include="Topology.hpp" />
+    <ClInclude Include="TransformCBuf.hpp" />
+    <ClInclude Include="VertexBuffer.hpp" />
+    <ClInclude Include="VertexShader.hpp" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowsMessageMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Bindable.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="ChiliException.cpp" />
     <ClCompile Include="ChiliTimer.cpp" />
+    <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GraphicsException.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PixelShader.cpp" />
+    <ClCompile Include="Topology.cpp" />
+    <ClCompile Include="TransformCBuf.cpp" />
+    <ClCompile Include="VertexBuffer.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowsMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />

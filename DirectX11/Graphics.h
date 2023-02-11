@@ -12,9 +12,11 @@
 
 #include "DxgiInfoManager.h"
 #include "GraphicsException.h"
+#include "ThrowMacros.h"
 
 class Graphics
 {
+	friend class Bindable;
 public:
 	Graphics(HWND hWnd, UINT, UINT);
 	~Graphics() = default;
@@ -22,8 +24,12 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue, float alpha = 1.0f);
-	void DrawTestTriangle(float, float, float);
+	void DrawIndexed(UINT count) noexcept;
 	void CheckException() const;
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
+private:
+	DirectX::XMMATRIX projection;
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;

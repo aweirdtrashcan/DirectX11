@@ -1,6 +1,5 @@
 #include "Graphics.h"
 
-
 namespace WRL = Microsoft::WRL;
 
 Graphics::Graphics(HWND hWnd, UINT width, UINT height)
@@ -83,14 +82,23 @@ Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 	DX_CHECK_ERROR(pDevice->CreateDepthStencilView(pTexture.Get(), &pDSVDesc, &pDSV));
 
 	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+
+	D3D11_VIEWPORT vp;
+	vp.Width = 800.0f;
+	vp.Height = 600.0f;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vp);
 }
 
 void Graphics::EndFrame()
 {
 #ifndef NDEBUG
-	DX_CHECK_ERROR(pSwap->Present(0u, 0u));
+	DX_CHECK_ERROR(pSwap->Present(1u, 0u));
 #else
-	pSwap->Present(0u, 0u);
+	pSwap->Present(1u, 0u);
 #endif
 }
 
@@ -101,185 +109,9 @@ void Graphics::ClearBuffer(float red, float green, float blue, float alpha)
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, NULL);
 }
 
-void Graphics::DrawTestTriangle(float angle, float x, float z)
+void Graphics::DrawIndexed(UINT count) noexcept
 {
-	struct Vertex
-	{
-		struct
-		{
-			float x;
-			float y;
-			float z;
-		} pos;
-	};
-
-	Vertex vertices[] =
-	{
-		{-1.0f, -1.0f, -1.0f }, // 0
-		{ 1.0f, -1.0f, -1.0f }, // 1
-		{-1.0f,  1.0f, -1.0f }, // 2
-		{ 1.0f,  1.0f, -1.0f }, // 3
-
-		{-1.0f, -1.0f, 1.0f }, // 4
-		{ 1.0f, -1.0f, 1.0f }, // 5
-		{-1.0f,  1.0f, 1.0f }, // 6
-		{ 1.0f,  1.0f, 1.0f }, // 7
-	};
-
-	D3D11_BUFFER_DESC bd{};
-	D3D11_SUBRESOURCE_DATA sd{};
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.CPUAccessFlags = 0u;
-	bd.StructureByteStride = sizeof(Vertex);
-	bd.MiscFlags = 0;
-	bd.ByteWidth = sizeof(vertices);
-
-	sd.pSysMem = vertices;
-
-	DX_CHECK_ERROR(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
-
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0u;
-	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-
-	const unsigned short indices[] =
-	{
-		0,2,1,	2,3,1,
-		1,3,5,	3,7,5,
-		2,6,3,	3,6,7,
-		4,5,7,	4,7,6,
-		0,4,2,	2,4,6,
-		0,1,4,	1,5,4
-	};
-
-	WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-	D3D11_BUFFER_DESC ibd = {};
-	D3D11_SUBRESOURCE_DATA isd = {};
-	ibd.ByteWidth = sizeof(indices);
-	ibd.StructureByteStride = sizeof(unsigned short);
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = NULL;
-	ibd.MiscFlags = NULL;
-	ibd.Usage = D3D11_USAGE_DEFAULT;
-
-	isd.pSysMem = indices;
-
-	DX_CHECK_ERROR(pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer));
-
-	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
-	struct ConstantBuffer
-	{
-		DirectX::XMMATRIX transform;
-	};
-
-	const ConstantBuffer cb =
-	{
-		{
-			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(angle) *
-				DirectX::XMMatrixRotationX(angle) *
-				DirectX::XMMatrixTranslation(x, 0.0f, z + 4.0f) *
-				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.f)
-			)
-		}
-	};
-
-	WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	D3D11_BUFFER_DESC cbd = {};
-	D3D11_SUBRESOURCE_DATA csd = {};
-	cbd.ByteWidth = sizeof(cb);
-	cbd.StructureByteStride = NULL;
-	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
-	cbd.Usage = D3D11_USAGE_DYNAMIC;
-	cbd.MiscFlags = NULL;
-
-	csd.pSysMem = &cb;
-
-	DX_CHECK_ERROR(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
-
-	pContext->VSSetConstantBuffers(0u, 1, pConstantBuffer.GetAddressOf());
-
-	struct ConstantBuffer2
-	{
-		struct
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		} face_colors[6];
-	};
-
-	const ConstantBuffer2 cb2 =
-	{
-		{
-			{1.0f, 0.0f, 1.0f, 1.0f},
-			{1.0f, 0.0f, 0.0f, 1.0f},
-			{0.0f, 1.0f, 0.0f, 1.0f},
-			{0.0f, 0.0f, 1.0f, 1.0f},
-			{1.0f, 1.0f, 0.0f, 1.0f},
-			{0.0f, 1.0f, 1.0f, 1.0f},
-		}
-	};
-
-	WRL::ComPtr<ID3D11Buffer> pConstantBuffer2;
-	D3D11_BUFFER_DESC cbd2 = {};
-	D3D11_SUBRESOURCE_DATA csd2 = {};
-	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd2.Usage = D3D11_USAGE_DEFAULT;
-	cbd2.CPUAccessFlags = NULL;
-	cbd2.MiscFlags = NULL;
-	cbd2.ByteWidth = sizeof(cb2);
-	cbd2.StructureByteStride = NULL;
-	csd2.pSysMem = &cb2;
-
-	DX_CHECK_ERROR(pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2));
-
-	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
-
-	WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	WRL::ComPtr<ID3DBlob> pBlob;
-	D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
-	DX_CHECK_ERROR(pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
-
-	pContext->VSSetShader(pVertexShader.Get(), NULL, NULL);
-
-	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	const D3D11_INPUT_ELEMENT_DESC ied[] =
-	{
-		{ "Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	WRL::ComPtr<ID3D11InputLayout> pInputLayout;
-
-	DX_CHECK_ERROR(pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
-
-	pContext->IASetInputLayout(pInputLayout.Get());
-
-	WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-
-	DX_CHECK_ERROR(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
-	DX_CHECK_ERROR(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
-
-	pContext->PSSetShader(pPixelShader.Get(), nullptr, NULL);
-
-	//pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
-
-	D3D11_VIEWPORT vp = {};
-	vp.Width = 800;
-	vp.Height = 600;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-
-	pContext->RSSetViewports(1u, &vp);
-
-	pContext->DrawIndexed((UINT)std::size(indices), 0, 0);
+	pContext->DrawIndexed(count, 0u, 0u);
 	CheckException();
 }
 
@@ -288,4 +120,14 @@ void Graphics::CheckException() const
 	const std::vector<std::string> messages = dxgiIM.GetMessages();
 	if (!messages.empty())
 		DX_THROW_ERROR(messages);
+}
+
+void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
+{
+	projection = proj;
+}
+
+DirectX::XMMATRIX Graphics::GetProjection() const noexcept
+{
+	return projection;
 }

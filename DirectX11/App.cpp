@@ -39,34 +39,34 @@ void App::DoFrame()
 		yDelta -= 0.05f;
 	}
 
-	if (yDelta > 1.0f)
+	if (yDelta > 1.5f)
 	{
-		yDelta = 1.0f;
+		yDelta = 1.5f;
 	}
 
-	if (yDelta < -1.0f)
+	if (yDelta < -1.5f)
 	{
-		yDelta = -1.0f;
-	}
-
-	if (wnd.kbd.KeyIsPressed('A'))
-	{
-		xDelta += 0.05f;
+		yDelta = -1.5f;
 	}
 
 	if (wnd.kbd.KeyIsPressed('D'))
 	{
+		xDelta += 0.05f;
+	}
+
+	if (wnd.kbd.KeyIsPressed('A'))
+	{
 		xDelta -= 0.05f;
 	}
 
-	if (xDelta > 1.0f)
+	if (xDelta > 2.50f)
 	{
-		xDelta = 1.0f;
+		xDelta = 2.50f;
 	}
 
-	if (xDelta < -1.0f)
+	if (xDelta < -2.50f)
 	{
-		xDelta = -1.0f;
+		xDelta = -2.5f;
 	}
 
 	wnd.Gfx().DrawTestTriangle(

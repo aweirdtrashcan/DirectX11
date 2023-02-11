@@ -24,9 +24,40 @@ Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 	sd.SampleDesc.Quality = 0;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
+	WRL::ComPtr<IDXGIAdapter1> pAdapter;
+	std::vector<IDXGIAdapter1*> vAdapters;
+	WRL::ComPtr<IDXGIFactory1> pFactory;
+
+	CreateDXGIFactory1(__uuidof(IDXGIFactory1), &pFactory);
+
+	for (UINT i = 0; pFactory->EnumAdapters1(i, pAdapter.GetAddressOf())
+		!= DXGI_ERROR_NOT_FOUND; ++i)
+	{
+		vAdapters.push_back(pAdapter.Get());
+	}
+
+	std::string graphics_names;
+	std::vector<DXGI_ADAPTER_DESC1> dxgiAdapters;
+
+	for (const auto& adapter : vAdapters)
+	{
+		DXGI_ADAPTER_DESC1 adapter_desc;
+		adapter->GetDesc1(&adapter_desc);
+		dxgiAdapters.push_back(adapter_desc);
+
+		for (int i = 0; i < 128; ++i)
+		{
+			if (adapter_desc.Description[i] != '\0')
+				graphics_names += adapter_desc.Description[i];
+		}
+		graphics_names += '\n';
+	}
+
+	DX_THROW_ERROR(graphics_names.c_str());
+
 	DX_CHECK_ERROR(D3D11CreateDeviceAndSwapChain(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
+		vAdapters[0],
+		D3D_DRIVER_TYPE_UNKNOWN,
 		nullptr,
 		D3D11_CREATE_DEVICE_DEBUG,
 		nullptr,
@@ -89,7 +120,7 @@ Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 void Graphics::EndFrame()
 {
 #ifndef NDEBUG
-	DX_CHECK_ERROR(pSwap->Present(1u, 0u));
+	DX_CHECK_ERROR(pSwap->Present(0u, 0u));
 #else
 	pSwap->Present(1u, 0u);
 #endif
